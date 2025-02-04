@@ -1,4 +1,4 @@
-#Business Request-1:The report generates data upon Total trips,Avg. fare/km,Avg. fare/trip and the % contribution of each city's trips to the overall trips.This report also helps in assessing trip volume,pricing efficiency and each city's contribution to overall trip count#
+#Business Request-1: The report generates data upon Total trips,Avg. fare/km,Avg. fare/trip and the % contribution of each city's trips to the overall trips.This report also helps in assessing trip volume,pricing efficiency and each city's contribution to overall trip count#
 
 WITH city_trips AS (
     SELECT 
@@ -19,7 +19,10 @@ SELECT
 FROM city_trips AS c
 ORDER BY percentage_contribution DESC;
 
-#Business Request-2: #
+#Business Request-2: Generate a report that evaluates the target performance for trips at the monthly and city level. For each City and Month,compare the actual with the target trips and categorise performance by:
+	Request 1: Actual trips > target trips, then mark "Above Target".
+	Request 2: Actual trips < target trips, then mark "Below Target".
+	Request 3: Calculating % difference between actual and target trips#
 
 With b as (select city_id,monthname(date) as month_name,month(date) as month,count(trip_id) as actual_trips 
 	from fact_trips 
@@ -35,7 +38,7 @@ With b as (select city_id,monthname(date) as month_name,month(date) as month,cou
 	on c.city_id = b.city_id and c.month_name = b.month_name
 order by a.city_name, b.month;
 
-#Business Request-3 :#
+#Business Request-3: Generate a Report that shows the percentage distribution of repeat passengers by no. of trips they have taken in each city.Calculate % of repeat passengers who took 2 trips,3 trips and upto 10 trips#
 
 WITH trip_distribution AS (
     SELECT 
@@ -76,7 +79,7 @@ FROM percentage_calculation
 GROUP BY city_name;
 
 
-#Business Request-4#
+#Business Request-4: Generate a report that calculates the total new passengers for each city and ranks them well based on this value. Identify the highest and lowest no. of  new passengers for both Top-3 and Bottom-3 cities categorizing them as "Top-3" and "Bottom-3" respectively.#
 
 WITH ranked_cities AS (
     SELECT 
@@ -97,7 +100,7 @@ SELECT
     END AS city_category
 FROM ranked_cities;
 
-#Business Request-5:
+#Business Request-5: Generate a report that identifies the month with highest revenue for each city.For each city,display month_name,revenue amount for the month and % contribution of the month's revenue to city's total revenue# 
 
 WITH monthly_revenue AS (
     SELECT 
@@ -125,8 +128,10 @@ SELECT
 FROM ranked_revenue
 WHERE rnk = 1;
 
-#Business Request-6
-
+#Business Request-6 : Generate a report that calculates two metrices,
+(a)Monthly Repeat Passenger Rate: Calculate the repeat passenger rate for each city and month by comparing the no. of repeat passenger to total passenger.
+(b)City Wide Passenger Rate: Calculate the overall repeat passenger rate for each city,considering all passengers across months.
+   These Metrics will provide insights into monthly repeat trends as well as the overall repeat behaviour of each city.#
 
 WITH monthly_passenger_data AS (
     SELECT 
